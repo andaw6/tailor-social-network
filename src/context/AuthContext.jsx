@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import {jwtDecode} from 'jwt-decode'; // Utilisé pour décoder le token JWT
+import UnauthenticatedError from "../components/error/UnauthenticatedError";
+import UnauthorizedError from "../components/error/UnauthorizedError";
 
 // Crée le contexte d'authentification
 const AuthContext = createContext(null);
@@ -56,13 +58,16 @@ export const AuthProvider = ({ children }) => {
 // Hook personnalisé pour accéder au contexte
 export const useAuth = () => useContext(AuthContext);
 
-// Composant pour restreindre l'accès en fonction du rôle
 export const RequireRole = ({ allowedRoles, children }) => {
     const { isAuthenticated, userRole } = useAuth();
 
-    if (!isAuthenticated || !allowedRoles.includes(userRole)) {
-        return <p>Vous n'êtes pas autorisé à accéder à cette ressource.</p>;
+    if (!isAuthenticated) {
+        return <UnauthenticatedError />;
     }
 
-    return children;  // Si l'utilisateur a un rôle autorisé, il accède au contenu
+    if (!allowedRoles.includes(userRole)) {
+        return <UnauthorizedError />;
+    }
+
+    return children;
 };

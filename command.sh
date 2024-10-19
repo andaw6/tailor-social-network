@@ -9,3 +9,5 @@ npm install @emotion/styled
 npm install -g depcheck
 
 npm install jwt-decode
+
+npm install lucide-react

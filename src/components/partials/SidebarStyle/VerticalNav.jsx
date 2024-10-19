@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Accordion } from 'react-bootstrap';
 import NavItemWithTooltip from './vericalnav/NavItemWithTooltip';
 import AccordionMenu from './vericalnav/AccordionMenu';
+import { useAuth } from '../../../context/AuthContext';
 
 
 const menuItems = [
@@ -32,22 +33,6 @@ const menuItems = [
         path: '/dashboards/app/friend-list',
         tooltip: 'Friend List',
     },
-    // {
-    //     eventKey: 'blog-menu',
-    //     icon: 'article',
-    //     label: 'Blog',
-    //     subItems: [
-    //         { path: '/dashboard/blog/blog-grid', label: 'Blog Grid', tooltip: 'Blog Grid', miniIcon: 'BG' },
-    //         { path: '/dashboard/blog/blog-list', label: 'Blog List', tooltip: 'Blog List', miniIcon: 'BL' },
-    //         { path: '/dashboard/blog/blog-detail', label: 'Blog Detail', tooltip: 'Blog Detail', miniIcon: 'BD' },
-    //     ],
-    // },
-    // {
-    //     eventKey: 'makeplace-menu',
-    //     icon: 'build',
-    //     label: 'Makeplace',
-    //     subItems: [{ path: '/dashboards/makeplace/workshop', label: 'Workshop', tooltip: 'Workshop', miniIcon: 'W' }],
-    // },
     {
         eventKey: 'message-menu',
         icon: 'chat',
@@ -67,21 +52,13 @@ const menuItems = [
             { path: '/dashboards/store/store-checkout', label: 'Checkout', tooltip: 'Checkout', miniIcon: 'CO' },
         ],
     },
-    // {
-    //     eventKey: 'market-menu',
-    //     icon: 'poll',
-    //     label: 'Market Place',
-    //     subItems: [
-    //         { path: '/dashboards/market-place/market1', label: 'Market 1', tooltip: 'Market 1', miniIcon: 'M1' },
-    //         { path: '/dashboards/market-place/market2', label: 'Market 2', tooltip: 'Market 2', miniIcon: 'M2' },
-    //     ],
-    // },
 ];
 
 
 
 const VerticalNav = () => {
     const [activeMenu, setActiveMenu] = useState('');
+    const { isAuthenticated } = useAuth();
 
     return (
         <Accordion as="ul" className="navbar-nav iq-main-menu" id="sidebar-menu">
@@ -98,6 +75,15 @@ const VerticalNav = () => {
                 ) : (
                     <NavItemWithTooltip key={index} path={item.path} icon={item.icon} label={item.label} tooltip={item.tooltip} />
                 )
+            )}
+             {!isAuthenticated && (
+                <NavItemWithTooltip
+                    key="connexion"
+                    path="/auth/sign-in"
+                    icon="login"
+                    label="Se connecter"
+                    tooltip="Se connecter"
+                />
             )}
         </Accordion>
     );

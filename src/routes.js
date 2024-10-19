@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { RequireRole } from './context/AuthContext';
 
 const PrivateRoute = lazy(() => import('./hoc/PrivateRoute'));
 const UserProfile = lazy(() => import('./pages/profile/UserProfile'));
@@ -29,8 +30,8 @@ const AppRoutes = () => {
             <Default />
           }
         >
+            <Route path="dashboard/app/profile" element={<RequireRole allowedRoles={['CLIENT', 'ADMIN']}><UserProfile/></RequireRole>} />
           <Route element={<PrivateRoute />}>
-            <Route path="dashboard/app/profile" element={<UserProfile />} />
             <Route path="dashboard/app/user-profile-edit" element={<EditUserProfile />} />
           </Route>
 
